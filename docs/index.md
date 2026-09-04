@@ -62,11 +62,11 @@ The assembly contains 383,947,622 bp across 99 sequences and has a scaffold N50 
 
 The high apparent coverage of the rearranged reference does **not** demonstrate that this structure is present. Most of the two replicons is shared, and mapping separately against each target allows the same homologous reads to align to both.
 
-### Circle-compatible adjacency
+### Published FASTA boundary is not diagnostic of circularity
 
-There were **265** primary HiFi alignments with MAPQ ≥20 extending at least 100 bp to each side of the internalized `MT025716.1` end-to-start adjacency.
+There were **265** primary HiFi alignments with MAPQ ≥20 extending at least 100 bp to each side of the internalized `MT025716.1` end-to-start boundary. A subsequent 31-mer test showed that every one of the 30 k-mers crossing this boundary occurs many times in the haploid chromosome assembly: observed reference multiplicities range from 31 to 51 copies.
 
-This is strong evidence that the adjacency exists in the sample. It is described as “circle-compatible” because the same head-to-tail adjacency could occur between units in a chromosomal tandem array. Sequencing junction evidence alone does not prove physical extrachromosomal localization.
+Consequently, the published FASTA origin lies in highly repetitive sequence. The 265 reads validate continuity across this representation boundary but are **not circle-specific evidence** and cannot distinguish eccDNA from genomic repeats or a tandem array. The earlier interpretation of these reads as strong circle-compatible junction evidence is retracted. Circularity must instead be evaluated through assembly-graph closure, structure-specific nonrepetitive adjacencies, absence/presence of chromosome-anchor junctions, and orthogonal physical evidence.
 
 ### Original versus rearranged structure
 
@@ -206,9 +206,9 @@ The k-mer estimate of approximately **10.1–10.2 copies per haploid genome equi
 | Question | Current conclusion |
 |---|---|
 | Is the original EPSPS replicon sequence amplified? | Strongly supported |
-| Does the published end-to-start adjacency exist? | Strongly supported by 265 HiFi reads |
+| Does the published end-to-start boundary establish circularity? | No; all crossing 31-mers occur 31–51 times in the chromosome assembly |
 | Is the complete EPSPS+GS2 rearranged replicon present? | Not supported; one required junction has zero reads |
-| Is the structure definitively extrachromosomal from sequencing alone? | Not yet; tandem and integrated alternatives must be excluded |
+| Is the structure definitively extrachromosomal from sequencing alone? | No; tandem and integrated alternatives remain unresolved |
 | What is the absolute EPSPS copy number? | Not yet estimated |
 
 The result is consistent with the published description of `SRR30359588` as the MSR2 glyphosate-resistant individual carrying the original EPSPS-only replicon.

@@ -47,6 +47,8 @@ A rotated copy of `MT025716.1` was generated with position 199,718 as the new st
 11. Mapped all HiFi reads to the chromosome assembly and identified the unique native EPSPS locus.
 12. Tested local EPSPS flanks as potential normalization controls and rejected them because of asymmetric depth, missing coverage, and structural divergence.
 13. Completed a genome-wide 10-kb control-window analysis that excludes regions homologous to the eccDNA and requires at least 95% breadth of coverage.
+14. Confirmed total EPSPS dosage independently with conserved, unique 31-mer multiplicity.
+15. Submitted whole-genome HiFi assembly with hifiasm 0.19.5 as Slurm job `12150324`; it is currently pending resource availability.
 
 The assembly contains 383,947,622 bp across 99 sequences and has a scaffold N50 of 23,590,137 bp.
 
@@ -200,6 +202,20 @@ Canonical 31-mers were counted directly from the HiFi FASTQ with Jellyfish 2.3.1
 | Median-based k-mer CN (`286 / 28`) | 10.214× |
 
 The k-mer estimate of approximately **10.1–10.2 copies per haploid genome equivalent** agrees exceptionally well with the GC-matched mapping estimate of 10.15–10.17. The convergent working estimate is therefore **approximately 10.2 total EPSPS copies per haploid genome equivalent**, or **approximately 20.3 copies per 2C diploid genome equivalent**. Because one native EPSPS copy exists per haploid chromosome complement, this corresponds to roughly nine additional amplified copies per haploid equivalent. The data do not yet assign every additional copy numerically to eccDNA or tandem architecture.
+
+### Assembly-based architecture analysis in progress
+
+A de novo assembly retaining primary-contig, alternate-contig, and raw-unitig GFA graphs has been submitted with hifiasm 0.19.5. The job requests 32 CPUs and 128 GB RAM and is pending scheduler resources. All graph layers will be retained because a linearized FASTA alone discards graph connections needed to test for cycles.
+
+After assembly, EPSPS will be located in every graph layer. The corresponding connected component will be evaluated for:
+
+- graph closure consistent with a circular molecule;
+- repeated head-to-tail paths consistent with tandem sequence;
+- edges to unique chromosome flanks indicating integration or a chromosome-anchored array;
+- nonrepetitive junctions that can be counted independently;
+- coverage multiplicity relative to primary chromosomal contigs.
+
+A closed assembly component is supportive but not physically definitive evidence of eccDNA, because tandem repeats can also create cyclic assembly graphs. Final architecture claims will integrate graph structure, raw-read support, chromosome-anchor evidence, susceptible controls, and orthogonal assays.
 
 ## Current interpretation
 

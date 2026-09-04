@@ -30,11 +30,24 @@ awk '/^S/ { print ">"$2; print $3 }' \
     > "$PREFIX.primary_contigs.fa"
 
 awk '/^S/ { print ">"$2; print $3 }' \
-    "$PREFIX.bp.a_ctg.gfa" \
-    > "$PREFIX.alternate_contigs.fa"
-
-awk '/^S/ { print ">"$2; print $3 }' \
     "$PREFIX.bp.r_utg.gfa" \
     > "$PREFIX.raw_unitigs.fa"
+
+# Hifiasm may emit either an alternate-contig graph or separate phased
+# haplotype graphs, depending on the assembly outcome and version.
+if [[ -s "$PREFIX.bp.a_ctg.gfa" ]]; then
+    awk '/^S/ { print ">"$2; print $3 }' \
+        "$PREFIX.bp.a_ctg.gfa" \
+        > "$PREFIX.alternate_contigs.fa"
+fi
+
+for HAPLOTYPE in hap1 hap2; do
+    HAP_GFA="$PREFIX.bp.${HAPLOTYPE}.p_ctg.gfa"
+    if [[ -s "$HAP_GFA" ]]; then
+        awk '/^S/ { print ">"$2; print $3 }' \
+            "$HAP_GFA" \
+            > "$PREFIX.${HAPLOTYPE}_contigs.fa"
+    fi
+done
 
 ls -lh "$OUTDIR"

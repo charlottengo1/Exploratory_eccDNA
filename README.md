@@ -46,7 +46,7 @@ A rotated copy of `MT025716.1` was generated with position 199,718 as the new st
 10. Downloaded and validated chromosome-level *A. palmeri* assembly `GCA_051800445.1` for genome-normalized copy number and chromosome-flank analysis.
 11. Mapped all HiFi reads to the chromosome assembly and identified the unique native EPSPS locus.
 12. Tested local EPSPS flanks as potential normalization controls and rejected them because of asymmetric depth, missing coverage, and structural divergence.
-13. Started a genome-wide 10-kb control-window analysis that excludes regions homologous to the eccDNA and requires at least 95% breadth of coverage.
+13. Completed a genome-wide 10-kb control-window analysis that excludes regions homologous to the eccDNA and requires at least 95% breadth of coverage.
 
 The assembly contains 383,947,622 bp across 99 sequences and has a scaffold N50 of 23,590,137 bp.
 
@@ -139,7 +139,23 @@ Across the 9,533-bp native genomic interval, primary nonsupplementary MAPQ/base-
 
 The two flanks disagree strongly and the left flank contains extensive missing coverage. Local alignments also have a high NM-per-read-base value (~0.175), likely reflecting large indels, structural discordance, and replicon-derived split alignments rather than ordinary HiFi substitution error. These regions are unsuitable normalization controls.
 
-Dividing EPSPS median depth by the whole-assembly filtered mean gives 13.26 copies per haploid genome equivalent (~26.5 per diploid cell equivalent), but this value is explicitly **provisional**. The whole-assembly mean is depressed by repeats, gaps, low-mappability sequence, and unplaced contigs. It will be replaced by the median of genome-wide high-breadth control windows.
+Dividing EPSPS median depth by the whole-assembly filtered mean gives 13.26 copies per haploid genome equivalent, but this value is rejected as the primary estimate. The whole-assembly mean is depressed by repeats, gaps, low-mappability sequence, and unplaced contigs.
+
+### Genome-wide control-window estimate
+
+The reference was divided into complete, non-overlapping 10-kb windows on its 17 chromosome-scale sequences. Windows overlapping any ≥500-bp, ≥90%-identity replicon-to-genome alignment plus 20-kb padding were excluded. Depth was calculated from primary nonsupplementary alignments with MAPQ ≥20, and only windows with at least 95% covered bases were retained.
+
+| Metric | Result |
+|---|---:|
+| Retained control windows | 10,996 |
+| Distinct padded eccDNA-homology exclusion intervals | 55 |
+| Control mean depth | 24.0967× |
+| Control median depth | 24.0964× |
+| Control-window SD | 8.8433× |
+| EPSPS mean depth / control mean | 10.686× |
+| EPSPS median depth / control median | 10.790× |
+
+The current depth-based estimate is therefore approximately **10.7–10.8 EPSPS copies per haploid genome equivalent**, or **21–22 copies per diploid genome equivalent**. “Diploid genome equivalent” is used instead of “copies per cell” because plant tissue may contain mixed ploidy from endoreduplication. The wide control-window SD indicates heterogeneous mapping/CN behavior, so distributional sensitivity analysis and an independent k-mer estimate remain necessary before treating 10.8 as final.
 
 ## Current interpretation
 
@@ -168,15 +184,14 @@ This requires mapping to a nonredundant chromosome assembly, checking EPSPS para
 
 ## Next steps
 
-1. Finish the genome-wide high-breadth 10-kb control-window baseline.
-2. Estimate total EPSPS dosage with uncertainty and inspect the control-depth distribution for multimodality.
-3. Add a mapping-independent HiFi k-mer multiplicity estimate with Jellyfish.
-4. Map to genome plus versioned eccDNA decoys for structure-aware read assignment.
-5. Search for reads connecting EPSPS repeat units to unique chromosome flanks.
-6. Call long-read structural variants and perform local assembly around EPSPS.
-7. Partition dosage into `eccDNA-supported`, `tandem-supported`, and `unassigned` components only where structure-specific evidence permits.
-8. Benchmark against susceptible HiFi runs from the same BioProject.
-9. Validate the final model with junction PCR/ddPCR and FISH when real experimental material is available.
+1. Inspect control-depth quantiles and histogram for multimodality and calculate robust uncertainty/sensitivity bounds.
+2. Add a mapping-independent HiFi k-mer multiplicity estimate with Jellyfish.
+3. Map to genome plus versioned eccDNA decoys for structure-aware read assignment.
+4. Search for reads connecting EPSPS repeat units to unique chromosome flanks.
+5. Call long-read structural variants and perform local assembly around EPSPS.
+6. Partition dosage into `eccDNA-supported`, `tandem-supported`, and `unassigned` components only where structure-specific evidence permits.
+7. Benchmark against susceptible HiFi runs from the same BioProject.
+8. Validate the final model with junction PCR/ddPCR and FISH when real experimental material is available.
 
 ## Reproducibility rules
 

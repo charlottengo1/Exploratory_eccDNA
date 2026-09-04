@@ -44,6 +44,9 @@ A rotated copy of `MT025716.1` was generated with position 199,718 as the new st
 8. Counted primary MAPQ ≥20 alignments spanning candidate junctions.
 9. Aligned the two reference structures directly to define their diagnostic intervals.
 10. Downloaded and validated chromosome-level *A. palmeri* assembly `GCA_051800445.1` for genome-normalized copy number and chromosome-flank analysis.
+11. Mapped all HiFi reads to the chromosome assembly and identified the unique native EPSPS locus.
+12. Tested local EPSPS flanks as potential normalization controls and rejected them because of asymmetric depth, missing coverage, and structural divergence.
+13. Started a genome-wide 10-kb control-window analysis that excludes regions homologous to the eccDNA and requires at least 95% breadth of coverage.
 
 The assembly contains 383,947,622 bp across 99 sequences and has a scaffold N50 of 23,590,137 bp.
 
@@ -85,6 +88,59 @@ These values agree with the published 21,952-bp deletion and 53,159-bp insertion
 
 A complete rearranged circle requires both insertion junctions. The absent right junction and depleted GS2-insertion depth argue against a complete `PQ252370.1` structure in this individual. One-sided support may reflect native chromosome 15 sequence, partial homology, an incomplete rearrangement, or mapping artifacts.
 
+### Whole-genome mapping
+
+The 802,112 HiFi reads were mapped to `GCA_051800445.1` with minimap2 `map-hifi` and coordinate-sorted with samtools.
+
+| Metric | Result |
+|---|---:|
+| Primary reads | 802,112 |
+| Primary mapped reads | 800,389 |
+| Primary mapping rate | 99.79% |
+| Raw sequence yield / assembly length | ~30.86× |
+| Primary reads with MAPQ 0 | 23,175 |
+| Secondary alignment records | 1,387,998 |
+| Supplementary alignment records | 1,382,394 |
+| Bases mapped from CIGAR | 10,184,061,775 |
+
+The many non-primary alignments are biologically and analytically relevant: the genome and replicon contain abundant repeated and rearranged sequence. They are retained for later structural analysis but excluded from ordinary depth estimates.
+
+### Native EPSPS locus
+
+The complete 1,599-bp EPSPS transcript `FJ861242.1` was aligned in splice-aware mode. It produced one MAPQ 60 genomic match:
+
+```text
+CM122062.1:12,484,568–12,494,100  (1-based)
+```
+
+The corresponding locus on the original replicon is:
+
+```text
+MT025716.1:135,758–146,025  (1-based)
+```
+
+Across the 9,533-bp native genomic interval, primary nonsupplementary MAPQ/base-quality ≥20 coverage was uniform:
+
+| Metric | Result |
+|---|---:|
+| Mean depth | 257.506× |
+| Median depth | 260× |
+| Depth SD | 19.570× |
+| Minimum / maximum | 195× / 293× |
+| Zero-coverage fraction | 0 |
+
+### Why local flanks were rejected as controls
+
+| Candidate baseline | Mean depth | SD | Zero-coverage fraction |
+|---|---:|---:|---:|
+| 90-kb left flank | 9.957× | 8.336× | 29.12% |
+| 100-kb right flank | 16.214× | 8.311× | 0.58% |
+| Whole-assembly filtered mean | 19.606× | — | — |
+
+The two flanks disagree strongly and the left flank contains extensive missing coverage. Local alignments also have a high NM-per-read-base value (~0.175), likely reflecting large indels, structural discordance, and replicon-derived split alignments rather than ordinary HiFi substitution error. These regions are unsuitable normalization controls.
+
+Dividing EPSPS median depth by the whole-assembly filtered mean gives 13.26 copies per haploid genome equivalent (~26.5 per diploid cell equivalent), but this value is explicitly **provisional**. The whole-assembly mean is depressed by repeats, gaps, low-mappability sequence, and unplaced contigs. It will be replaced by the median of genome-wide high-breadth control windows.
+
 ## Current interpretation
 
 | Question | Current conclusion |
@@ -112,16 +168,15 @@ This requires mapping to a nonredundant chromosome assembly, checking EPSPS para
 
 ## Next steps
 
-1. Align the original replicon to `GCA_051800445.1` and locate all native source segments.
-2. Map HiFi reads to the genome alone for unbiased total EPSPS dosage.
-3. Locate native EPSPS and GS2 loci by sequence alignment rather than assuming chromosome coordinates transfer between assemblies.
-4. Select GC- and mappability-matched single-copy control windows.
-5. Map to genome plus versioned eccDNA decoys for structure-aware read assignment.
-6. Search for reads connecting EPSPS repeat units to unique chromosome flanks.
-7. Call long-read structural variants and perform local assembly around EPSPS.
-8. Partition dosage into `eccDNA-supported`, `tandem-supported`, and `unassigned` components only where structure-specific evidence permits.
-9. Benchmark against susceptible HiFi runs from the same BioProject.
-10. Validate the final model with junction PCR/ddPCR and FISH when real experimental material is available.
+1. Finish the genome-wide high-breadth 10-kb control-window baseline.
+2. Estimate total EPSPS dosage with uncertainty and inspect the control-depth distribution for multimodality.
+3. Add a mapping-independent HiFi k-mer multiplicity estimate with Jellyfish.
+4. Map to genome plus versioned eccDNA decoys for structure-aware read assignment.
+5. Search for reads connecting EPSPS repeat units to unique chromosome flanks.
+6. Call long-read structural variants and perform local assembly around EPSPS.
+7. Partition dosage into `eccDNA-supported`, `tandem-supported`, and `unassigned` components only where structure-specific evidence permits.
+8. Benchmark against susceptible HiFi runs from the same BioProject.
+9. Validate the final model with junction PCR/ddPCR and FISH when real experimental material is available.
 
 ## Reproducibility rules
 

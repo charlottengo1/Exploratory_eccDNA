@@ -157,6 +157,18 @@ The reference was divided into complete, non-overlapping 10-kb windows on its 17
 
 The current depth-based estimate is therefore approximately **10.7–10.8 EPSPS copies per haploid genome equivalent**, or **21–22 copies per diploid genome equivalent**. “Diploid genome equivalent” is used instead of “copies per cell” because plant tissue may contain mixed ploidy from endoreduplication. The wide control-window SD indicates heterogeneous mapping/CN behavior, so distributional sensitivity analysis and an independent k-mer estimate remain necessary before treating 10.8 as final.
 
+The retained control-depth distribution is broad but has one main mode rather than an obvious second peak at twice the baseline:
+
+| Quantile | 10-kb window mean depth |
+|---|---:|
+| 5th percentile | 10.333× |
+| 25th percentile | 18.614× |
+| Median | 24.095× |
+| 75th percentile | 29.236× |
+| 95th percentile | 37.058× |
+
+The most populated 2× bins are 22–24× (1,133 windows), 24–26× (1,110), and 26–28× (1,056). This supports a central single-copy baseline around 24–26×. Substituting the control interquartile bounds as denominators gives a deliberately conservative sensitivity range of approximately 8.9–14.0 EPSPS copies per haploid genome equivalent. This is a denominator-sensitivity range, not a statistical confidence interval. GC-matched controls and k-mer multiplicity will be used to narrow systematic uncertainty.
+
 ## Current interpretation
 
 | Question | Current conclusion |

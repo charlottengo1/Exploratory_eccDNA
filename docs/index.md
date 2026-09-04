@@ -185,6 +185,22 @@ The native EPSPS genomic interval has 35.96% GC. Restricting the high-breadth co
 
 The preferred mapping-depth estimate is therefore **about 10.16 EPSPS copies per haploid genome equivalent**, equivalent to **about 20.3 copies per 2C diploid genome equivalent**. This is total EPSPS dosage represented in the DNA extraction; it is not yet a numerical partition into eccDNA versus tandem copies.
 
+### Mapping-independent 31-mer validation
+
+Canonical 31-mers were counted directly from the HiFi FASTQ with Jellyfish 2.3.1. EPSPS k-mers were retained only if they occurred exactly once in the haploid chromosome assembly and once in the original replicon, which avoids paralogous/repetitive markers and ensures that each retained k-mer represents one position per EPSPS unit.
+
+| Metric | Result |
+|---|---:|
+| Conserved, reference-unique EPSPS 31-mers | 3,153 |
+| Mean EPSPS 31-mer multiplicity | 282.663× |
+| Median EPSPS 31-mer multiplicity | 286× |
+| Heterozygous genome k-mer mode | ~14× |
+| Homozygous single-copy genome k-mer mode | ~28× |
+| Mean-based k-mer CN (`282.663 / 28`) | 10.095× |
+| Median-based k-mer CN (`286 / 28`) | 10.214× |
+
+The k-mer estimate of approximately **10.1–10.2 copies per haploid genome equivalent** agrees exceptionally well with the GC-matched mapping estimate of 10.15–10.17. The convergent working estimate is therefore **approximately 10.2 total EPSPS copies per haploid genome equivalent**, or **approximately 20.3 copies per 2C diploid genome equivalent**. Because one native EPSPS copy exists per haploid chromosome complement, this corresponds to roughly nine additional amplified copies per haploid equivalent. The data do not yet assign every additional copy numerically to eccDNA or tandem architecture.
+
 ## Current interpretation
 
 | Question | Current conclusion |
@@ -212,14 +228,13 @@ This requires mapping to a nonredundant chromosome assembly, checking EPSPS para
 
 ## Next steps
 
-1. Add a mapping-independent HiFi k-mer multiplicity estimate with Jellyfish.
-2. Quantify uncertainty from chromosome-block resampling rather than treating adjacent windows as independent.
-3. Map to genome plus versioned eccDNA decoys for structure-aware read assignment.
-4. Search for reads connecting EPSPS repeat units to unique chromosome flanks.
-5. Call long-read structural variants and perform local assembly around EPSPS.
-6. Partition dosage into `eccDNA-supported`, `tandem-supported`, and `unassigned` components only where structure-specific evidence permits.
-7. Benchmark against susceptible HiFi runs from the same BioProject.
-8. Validate the final model with junction PCR/ddPCR and FISH when real experimental material is available.
+1. Quantify uncertainty from chromosome-block resampling rather than treating adjacent windows as independent.
+2. Map to genome plus versioned eccDNA decoys for structure-aware read assignment.
+3. Search for reads connecting EPSPS repeat units to unique chromosome flanks.
+4. Call long-read structural variants and perform local assembly around EPSPS.
+5. Partition dosage into `eccDNA-supported`, `tandem-supported`, and `unassigned` components only where structure-specific evidence permits.
+6. Benchmark against susceptible HiFi runs from the same BioProject.
+7. Validate the final model with junction PCR/ddPCR and FISH when real experimental material is available.
 
 ## Reproducibility rules
 

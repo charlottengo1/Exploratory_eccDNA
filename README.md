@@ -169,6 +169,22 @@ The retained control-depth distribution is broad but has one main mode rather th
 
 The most populated 2× bins are 22–24× (1,133 windows), 24–26× (1,110), and 26–28× (1,056). This supports a central single-copy baseline around 24–26×. Substituting the control interquartile bounds as denominators gives a deliberately conservative sensitivity range of approximately 8.9–14.0 EPSPS copies per haploid genome equivalent. This is a denominator-sensitivity range, not a statistical confidence interval. GC-matched controls and k-mer multiplicity will be used to narrow systematic uncertainty.
 
+### GC-matched preferred depth estimate
+
+The native EPSPS genomic interval has 35.96% GC. Restricting the high-breadth control set to windows within ±2 percentage points of EPSPS GC retained 4,831 controls.
+
+| Metric | Result |
+|---|---:|
+| EPSPS GC | 35.959% |
+| GC-matched control windows | 4,831 |
+| GC-matched control mean depth | 25.3712× |
+| GC-matched control median depth | 25.576× |
+| GC-matched control SD | 8.6862× |
+| Mean-based EPSPS CN | 10.1496× |
+| Median-based EPSPS CN | 10.1658× |
+
+The preferred mapping-depth estimate is therefore **about 10.16 EPSPS copies per haploid genome equivalent**, equivalent to **about 20.3 copies per 2C diploid genome equivalent**. This is total EPSPS dosage represented in the DNA extraction; it is not yet a numerical partition into eccDNA versus tandem copies.
+
 ## Current interpretation
 
 | Question | Current conclusion |
@@ -196,8 +212,8 @@ This requires mapping to a nonredundant chromosome assembly, checking EPSPS para
 
 ## Next steps
 
-1. Inspect control-depth quantiles and histogram for multimodality and calculate robust uncertainty/sensitivity bounds.
-2. Add a mapping-independent HiFi k-mer multiplicity estimate with Jellyfish.
+1. Add a mapping-independent HiFi k-mer multiplicity estimate with Jellyfish.
+2. Quantify uncertainty from chromosome-block resampling rather than treating adjacent windows as independent.
 3. Map to genome plus versioned eccDNA decoys for structure-aware read assignment.
 4. Search for reads connecting EPSPS repeat units to unique chromosome flanks.
 5. Call long-read structural variants and perform local assembly around EPSPS.

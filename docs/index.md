@@ -48,7 +48,7 @@ A rotated copy of `MT025716.1` was generated with position 199,718 as the new st
 12. Tested local EPSPS flanks as potential normalization controls and rejected them because of asymmetric depth, missing coverage, and structural divergence.
 13. Completed a genome-wide 10-kb control-window analysis that excludes regions homologous to the eccDNA and requires at least 95% breadth of coverage.
 14. Confirmed total EPSPS dosage independently with conserved, unique 31-mer multiplicity.
-15. Submitted whole-genome HiFi assembly with hifiasm 0.19.5 as Slurm job `12150324`; it is currently pending resource availability.
+15. Completed whole-genome HiFi assembly with hifiasm 0.19.5 and retained primary, phased-haplotype, and raw-unitig graphs.
 
 The assembly contains 383,947,622 bp across 99 sequences and has a scaffold N50 of 23,590,137 bp.
 
@@ -205,7 +205,16 @@ The k-mer estimate of approximately **10.1–10.2 copies per haploid genome equi
 
 ### Assembly-based architecture analysis in progress
 
-A de novo assembly retaining primary-contig, alternate-contig, and raw-unitig GFA graphs has been submitted with hifiasm 0.19.5. The job requests 32 CPUs and 128 GB RAM and is pending scheduler resources. All graph layers will be retained because a linearized FASTA alone discards graph connections needed to test for cycles.
+A de novo assembly retaining primary-contig, phased-haplotype, and raw-unitig GFA graphs was completed with hifiasm 0.19.5. All graph layers are retained because a linearized FASTA alone discards graph connections needed to test for cycles.
+
+| Assembly layer | Sequences | Total length | Maximum | N50 | GC |
+|---|---:|---:|---:|---:|---:|
+| Primary contigs | 721 | 436,179,768 bp | 13,905,516 bp | 4,250,894 bp | 33.68% |
+| Haplotype 1 | 899 | 401,601,331 bp | 13,320,891 bp | 2,065,201 bp | 33.70% |
+| Haplotype 2 | 456 | 347,106,792 bp | 11,226,239 bp | 2,054,757 bp | 33.57% |
+| Raw unitigs | 11,427 | 821,574,356 bp | 2,858,985 bp | 246,316 bp | 33.80% |
+
+The 436.2-Mb primary assembly is about 13.6% larger than the 383.9-Mb susceptible haplotype reference. This difference can reflect retained alternate haplotypes, structural divergence, repetitive sequence, and amplified replicon material; it must not be attributed entirely to eccDNA. The 821.6-Mb raw-unitig total is approximately diploid-scale and retains many unresolved graph branches.
 
 After assembly, EPSPS will be located in every graph layer. The corresponding connected component will be evaluated for:
 

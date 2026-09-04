@@ -8,6 +8,8 @@
 
 set -euo pipefail
 
+module purge
+module load StdEnv/2020
 module load hifiasm/0.19.5
 
 PROJECT_DIR=/global/home/hpc6076/projects/epsps-eccdna

@@ -226,6 +226,22 @@ After assembly, EPSPS will be located in every graph layer. The corresponding co
 
 A closed assembly component is supportive but not physically definitive evidence of eccDNA, because tandem repeats can also create cyclic assembly graphs. Final architecture claims will integrate graph structure, raw-read support, chromosome-anchor evidence, susceptible controls, and orthogonal assays.
 
+#### EPSPS-containing assembly sequences
+
+Splice-aware alignment of the complete EPSPS coding transcript found one high-confidence locus in each contig-level assembly and four raw-unitig hits:
+
+| Layer | Sequence | Sequence length | EPSPS interval | Strand | MAPQ |
+|---|---|---:|---:|:---:|---:|
+| Primary | `ptg000197l` | 736,912 bp | 513,914–523,459 | − | 60 |
+| Haplotype 1 | `h1tg000094l` | 281,576 bp | 213,495–223,040 | + | 60 |
+| Haplotype 2 | `h2tg000271l` | 512,501 bp | 347,112–356,629 | − | 60 |
+| Raw unitig | `utg009432l` | 35,256 bp | 5,889–16,160 | + | 0 |
+| Raw unitig | `utg004630l` | 33,120 bp | 14,536–24,807 | + | 0 |
+| Raw unitig | `utg001424l` | 105,946 bp | 37,865–47,410 | + | 0 |
+| Raw unitig | `utg001416l` | 422,111 bp | 347,112–356,629 | − | 0 |
+
+Every EPSPS-containing sequence name ends in `l`, hifiasm's linear classification, rather than `c` for circular. No EPSPS-containing circular contig was therefore identified directly. This is not proof against eccDNA: repeated high-copy molecules may be collapsed, broken, or incorporated into a linear traversal by the assembler. Likewise, one assembled EPSPS locus does not contradict the ~10.2-copy dosage because assemblers collapse near-identical copies. The long 736.9-kb primary contig is now the main target for testing replicon coverage, tandem structure, and chromosome-anchor sequence.
+
 ## Current interpretation
 
 | Question | Current conclusion |

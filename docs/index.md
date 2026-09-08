@@ -7,6 +7,11 @@ description: A reproducible PacBio HiFi workflow for quantifying EPSPS dosage an
 
 This project develops a reproducible sequencing workflow to estimate total **EPSPS** copy number and determine whether amplified copies are carried on extrachromosomal circular DNA (eccDNA), a chromosome-anchored tandem array, both architectures, or an unresolved structure.
 
+## Project pages
+
+- [MSR2 resistant benchmark](./) — detailed analysis of `SRR30359588`
+- [Sensitive versus resistant HiFi comparison](comparison.html) — `SRR30167488` versus `SRR30167495`
+
 ## Current status
 
 The first benchmark uses public PacBio HiFi data from a single glyphosate-resistant *Amaranthus palmeri* MSR2 plant. The sample is expected to carry the original EPSPS-only eccDNA and therefore provides a positive control for circle-compatible junction detection.
@@ -203,7 +208,7 @@ Canonical 31-mers were counted directly from the HiFi FASTQ with Jellyfish 2.3.1
 
 The k-mer estimate of approximately **10.1–10.2 copies per haploid genome equivalent** agrees exceptionally well with the GC-matched mapping estimate of 10.15–10.17. The convergent working estimate is therefore **approximately 10.2 total EPSPS copies per haploid genome equivalent**, or **approximately 20.3 copies per 2C diploid genome equivalent**. Because one native EPSPS copy exists per haploid chromosome complement, this corresponds to roughly nine additional amplified copies per haploid equivalent. The data do not yet assign every additional copy numerically to eccDNA or tandem architecture.
 
-### Assembly-based architecture analysis in progress
+### Assembly-based architecture analysis
 
 A de novo assembly retaining primary-contig, phased-haplotype, and raw-unitig GFA graphs was completed with hifiasm 0.19.5. All graph layers are retained because a linearized FASTA alone discards graph connections needed to test for cycles.
 
@@ -216,7 +221,7 @@ A de novo assembly retaining primary-contig, phased-haplotype, and raw-unitig GF
 
 The 436.2-Mb primary assembly is about 13.6% larger than the 383.9-Mb susceptible haplotype reference. This difference can reflect retained alternate haplotypes, structural divergence, repetitive sequence, and amplified replicon material; it must not be attributed entirely to eccDNA. The 821.6-Mb raw-unitig total is approximately diploid-scale and retains many unresolved graph branches.
 
-After assembly, EPSPS will be located in every graph layer. The corresponding connected component will be evaluated for:
+The EPSPS-containing sequences and their graph components are being evaluated for:
 
 - graph closure consistent with a circular molecule;
 - repeated head-to-tail paths consistent with tandem sequence;
@@ -240,7 +245,39 @@ Splice-aware alignment of the complete EPSPS coding transcript found one high-co
 | Raw unitig | `utg001424l` | 105,946 bp | 37,865–47,410 | + | 0 |
 | Raw unitig | `utg001416l` | 422,111 bp | 347,112–356,629 | − | 0 |
 
-Every EPSPS-containing sequence name ends in `l`, hifiasm's linear classification, rather than `c` for circular. No EPSPS-containing circular contig was therefore identified directly. This is not proof against eccDNA: repeated high-copy molecules may be collapsed, broken, or incorporated into a linear traversal by the assembler. Likewise, one assembled EPSPS locus does not contradict the ~10.2-copy dosage because assemblers collapse near-identical copies. The long 736.9-kb primary contig is now the main target for testing replicon coverage, tandem structure, and chromosome-anchor sequence.
+Every EPSPS-containing sequence name ends in `l`, hifiasm's linear classification, rather than `c` for circular. No EPSPS-containing circular contig was therefore identified directly. This is not proof against eccDNA: repeated high-copy molecules may be collapsed, broken, or incorporated into a linear traversal by the assembler. Likewise, one assembled EPSPS locus does not contradict the ~10.2-copy dosage because assemblers collapse near-identical copies.
+
+#### Contig identity: chromosome haplotypes, not complete replicons
+
+Whole-contig alignments show that all three contig-level EPSPS sequences are anchored extensively and collinearly to chromosome `CM122062.1` around the native EPSPS locus. The primary contig `ptg000197l` follows the chromosome in reverse orientation across approximately 12.349–13.040 Mb, while `h2tg000271l` spans much of approximately 12.434–12.860 Mb in reverse orientation. The shorter `h1tg000094l` also contains multiple unique, ordered matches around the native locus.
+
+In contrast, alignments to `MT025716.1` and `PQ252370.1` are restricted to short shared segments surrounding EPSPS (roughly 1–7 kb per alignment), with no broad coverage of either 399-kb or 426-kb replicon backbone. Each assembled primary/haplotype contig contains only one detected EPSPS locus. These contigs therefore represent native chromosome haplotypes rather than assembled copies of a complete replicon, and they provide no evidence for a head-to-tail EPSPS tandem array at the native locus.
+
+This negative assembly result does not exclude eccDNA or another amplified architecture. The approximately ten-copy depth signal can be collapsed or excluded during assembly. The next analysis targets the four EPSPS-positive raw unitigs and their GFA neighborhoods; `utg001416l` is 422,111 bp and is a priority for graph inspection, although its EPSPS coordinates match the haplotype-2 contig and its length alone is not evidence of a replicon.
+
+#### Raw-unitig and graph result
+
+Alignment of the four EPSPS-positive raw unitigs resolved their identities. `utg001416l` is extensively collinear with the native `CM122062.1` interval and corresponds to the haplotype-2 chromosome path. `utg001424l` also contains an ordered native-locus path, together with several repetitive off-target matches, and is consistent with the shorter haplotype-1 chromosome path.
+
+The two short unitigs are different overlapping traversals of the amplified/shared EPSPS region. `utg004630l` aligns across its full 33,120 bp to `PQ252370.1:160662–193756` and, in two pieces, to approximately `MT025716.1:122326–154332`. `utg009432l` aligns across its full 35,256 bp to `PQ252370.1:169302–204536` and `MT025716.1:129877–165093`, at greater than 99.8% identity. The raw graph directly connects these unitigs with a 24,473-bp overlap, but the reverse-direction `L` record represents the same bidirected edge rather than an independent closing edge. They therefore reconstruct only a local approximately 43.9-kb union of shared replicon sequence, not a complete circular molecule.
+
+One-hop expansion identifies a five-unitig amplified candidate branch: `utg001085l`, `utg004630l`, `utg004632l`, `utg004633l`, and `utg009432l`. High-confidence placements extend the confidently reconstructed original-replicon interval to approximately 115.6–167.8 kb; a MAPQ-0 match at 98.6–117.9 kb is ambiguous. Several unitigs provide alternative, overlapping traversals rather than a single longer linear path. Their hifiasm `rd:i` support values range from 34 to 105, compared with `rd:i:10` for both long native EPSPS chromosome unitigs. This elevated graph support is independent assembly evidence for collapsed amplification, but `rd:i` is not treated as a calibrated copy-number measure because reads may be assigned unevenly among alternative paths.
+
+Recursive undirected traversal from this branch reaches 143 raw unitigs connected by 462 GFA `L` records. Numerous nodes have elevated support, including `utg002490l` (`rd:i:138`), `utg005426l` (123), `utg003211l` (107), and `utg004630l` (105). Thus the amplified signal extends beyond the initial EPSPS-positive unitigs into a sizeable, highly branched component. The edge count and the presence of graph cycles are not themselves evidence of a circular molecule: reverse-complement edge representation, repeats, heterozygous bubbles, and alternative assembly traversals all generate cycles. Component-wide reference coverage and orientation-aware path reconstruction are required next.
+
+At an alignment threshold of at least 500 bp and at least 90% identity, the full component covers 388,933 of 399,435 bp (97.37%) of the original replicon in six merged intervals. Coverage is unchanged at MAPQ thresholds 0, 20, and 60, demonstrating that it is not driven by ambiguous mappings. The five uncovered intervals are `3,978–4,019`, `13,802–13,821`, `129,799–129,868`, `259,957–270,134`, and `311,483–311,679`; all but the approximately 10.2-kb fourth gap are very small.
+
+The component covers 370,029 of 426,133 bp (86.83%) of the rearranged replicon at MAPQ 0 and 364,666 bp (85.58%) at MAPQ at least 20. Critically, coverage across the rearranged reference has a large gap at `92,066–150,980`, and zero of the defined 53-kb GS2 insertion interval (`92,100–145,100`) is represented. None of the native EPSPS-component nodes (`utg001416l`, `utg001424l`, or their immediate neighbors) occurs among the 143 amplified-component nodes. Therefore, the result cannot be explained by accidental traversal into the native locus and provides high-confidence assembly evidence for a separate, nearly complete original-like EPSPS amplicon component without the GS2 insertion.
+
+An exhaustive edge audit found zero GFA links from the 143-node amplified component to any node outside it. The component is therefore fully isolated in the raw-unitig graph and does not connect to either native EPSPS chromosome component. Together with near-complete original-reference coverage and multiple assembled end-to-start traversals, this makes eccDNA the favored sequencing-based architecture. It is not definitive physical proof: an unanchored tandem/integrated array or repeat-collapsed chromosome boundaries could also yield a disconnected assembly component. Raw molecules spanning unique chromosome-to-amplicon junctions and orthogonal assays remain necessary for a definitive numerical eccDNA-versus-tandem split.
+
+Multiple individual MAPQ-60 unitigs traverse the linear-reference origin. For example, `utg003213l` maps from `MT025716.1:386,386–399,435` directly into `0–3,978`, and then continues at `4,019–13,802`; `utg006430l`, `utg007876l`, `utg008876l`, and `utg008882l` provide additional end/start-spanning traversals. Corresponding GFA links form several alternative origin-region paths. This is substantially stronger than coverage alone because the adjacency is assembled within individual sequences. Nevertheless, the origin lies in sequence whose crossing 31-mers occur 31–51 times in the chromosome assembly, and the same head-to-tail adjacency would occur between tandem copies. It is therefore closure-compatible evidence, not eccDNA-specific proof.
+
+The major remaining gap in the original-like component is exactly `259,957–270,134` (10,177 bp). It is bounded by `utg005424l`, ending at 259,957, and `utg002491l`, beginning at 270,134. The surrounding 20,001-bp interval has mean depth 142.54×, minimum depth 51×, and no zero-coverage bases; 170 primary MAPQ-20 alignments cross the left boundary and 95 cross the right. Ten alignments appeared to span the entire interval by reference coordinates, but every CIGAR contains a `7730D` or `7731D` operation. Three place it at `260,209–267,938`, while the others slide the same-length deletion to different positions between approximately 261.9 and 275.8 kb. This coordinate variability with invariant length is characteristic of alignment ambiguity within homologous tandem/repeated sequence, not evidence for eight distinct deletion alleles. The conservative interpretation is contraction by one approximately 7.73-kb repeat unit, with its precise breakpoint not uniquely localizable. No callable long alignment spanning the external interval supports the intact reference copy count (10 deletion-path versus 0 intact-path molecules), although internal depth may derive from other structural copies or genomic homologs.
+
+Across all 143 nodes, mean `rd:i` is 17.99; 44 nodes have `rd:i` at least 20, 18 have at least 50, and four have at least 100. This heterogeneous distribution is consistent with a mixture of amplified, shared-repeat, and lower-support alternative paths, and reinforces why `rd:i` should not be converted directly into absolute copy number.
+
+No primary, phased, or raw unitig spans the complete 399-kb original replicon or 426-kb rearranged replicon. No assembled tandem EPSPS array is present either. The amplified copies are thus unresolved in the current hifiasm contigs, making graph-neighborhood expansion and raw-read adjacency analysis necessary for architectural assignment.
 
 ## Current interpretation
 
@@ -249,8 +286,10 @@ Every EPSPS-containing sequence name ends in `l`, hifiasm's linear classificatio
 | Is the original EPSPS replicon sequence amplified? | Strongly supported |
 | Does the published end-to-start boundary establish circularity? | No; all crossing 31-mers occur 31–51 times in the chromosome assembly |
 | Is the complete EPSPS+GS2 rearranged replicon present? | Not supported; one required junction has zero reads |
+| Did hifiasm recover a complete EPSPS replicon or native tandem array? | No; contig-level hits are single-copy, chromosome-anchored haplotypes |
+| What do the short EPSPS raw unitigs represent? | Overlapping paths through ~44 kb of sequence shared with the replicons; not a complete circle |
 | Is the structure definitively extrachromosomal from sequencing alone? | No; tandem and integrated alternatives remain unresolved |
-| What is the absolute EPSPS copy number? | Not yet estimated |
+| What is the total EPSPS copy number? | Approximately 10.2 copies per haploid genome equivalent (~20.3 per 2C diploid genome equivalent) |
 
 The result is consistent with the published description of `SRR30359588` as the MSR2 glyphosate-resistant individual carrying the original EPSPS-only replicon.
 

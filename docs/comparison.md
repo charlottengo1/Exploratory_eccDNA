@@ -75,7 +75,7 @@ Both samples will be processed using identical references, filters, software ver
 - [x] FASTQ integrity and read statistics verified
 - [x] Chromosome mappings completed
 - [x] Mapping-based EPSPS CN estimated
-- [ ] Unique-k-mer CN estimated
+- [x] Unique-k-mer CN estimated
 - [ ] Replicon comparisons completed
 - [ ] Assemblies completed
 - [ ] EPSPS graph components classified
@@ -98,3 +98,14 @@ The native 9,533-bp EPSPS genomic interval and the same fixed set of 4,831 GC-ma
 | Tennessee-resistant `SRR30167495` | 3,649.25× | 3,835× | 48.188× | 50.982× | 75.730× | 75.223× |
 
 The sensitive sample is consistent with one native EPSPS copy per haploid genome equivalent. The resistant sample contains approximately **75.5 total EPSPS copies per haploid genome equivalent**, or roughly 74.5 amplified copies above the native locus. The close agreement of mean- and median-normalized estimates indicates that this conclusion is not driven by a small subset of EPSPS bases. This is total dosage; it does not yet allocate the amplified copies between eccDNA and tandem/integrated structures.
+
+### Mapping-independent 31-mer validation
+
+The same 3,153 EPSPS 31-mers that occur exactly once in the chromosome assembly and once in the canonical replicon were counted directly in both FASTQs. The dominant genome histogram modes are approximately 24× in the sensitive sample and 28× in the resistant sample. In these highly heterozygous, outcrossing diploid plants, these are allele-specific modes; the corresponding homozygous single-copy sequence depths are approximately 48× and 56×.
+
+| Sample | Mean marker count | Median marker count | Zero markers | Homozygous baseline | Mean-based CN | Median-based CN |
+|---|---:|---:|---:|---:|---:|---:|
+| Kansas-sensitive `SRR30167488` | 43.347× | 48× | 35 | ~48× | 0.903× | 1.000× |
+| Tennessee-resistant `SRR30167495` | 4,125.29× | 4,150× | 0 | ~56× | 73.666× | 74.107× |
+
+The sensitive mean is lowered by 35 absent markers and population-specific variation, making the median the more robust statistic. The resistant median-based k-mer estimate of **74.1 copies per haploid genome equivalent** agrees within approximately 1.5% of the mapping median estimate of 75.2. The convergent working estimate is therefore approximately **74–75 total EPSPS copies per haploid genome equivalent** in the Tennessee-resistant sample and approximately one copy in the Kansas-sensitive control.

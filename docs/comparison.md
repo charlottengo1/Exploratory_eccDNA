@@ -73,8 +73,8 @@ Both samples will be processed using identical references, filters, software ver
 - [x] Slurm array download prepared
 - [x] FASTQs downloaded
 - [x] FASTQ integrity and read statistics verified
-- [ ] Chromosome mappings completed
-- [ ] Mapping-based EPSPS CN estimated
+- [x] Chromosome mappings completed
+- [x] Mapping-based EPSPS CN estimated
 - [ ] Unique-k-mer CN estimated
 - [ ] Replicon comparisons completed
 - [ ] Assemblies completed
@@ -85,3 +85,16 @@ Both samples will be processed using identical references, filters, software ver
 ## Current activity
 
 Both compressed HiFi FASTQs passed `gzip -t`. `SRR30167488` contains 1,517,513 reads totaling 19,581,162,567 bp (mean 12,903.5 bp; N50 16,149 bp; Q20 96.36%; Q30 91.47%). `SRR30167495` contains 1,854,582 reads totaling 22,704,066,842 bp (mean 12,242.1 bp; N50 15,161 bp; Q20 96.47%; Q30 91.76%). GC content is nearly identical at 33.67% and 33.66%. The resistant sample has approximately 16% more sequence, so every locus comparison will use within-sample genome normalization rather than raw counts.
+
+Both samples were mapped to `GCA_051800445.1` with minimap2 2.30 `map-hifi`. The sensitive run has 1,494,316 of 1,517,513 primary reads mapped (98.47%). The mappings contain 2.53 million secondary records in the sensitive sample and 3.27 million in the resistant sample, with similarly abundant supplementary records. These non-primary records are retained for structural analysis but excluded from ordinary copy-number depth.
+
+### Mapping-based EPSPS copy number
+
+The native 9,533-bp EPSPS genomic interval and the same fixed set of 4,831 GC-matched control windows were measured from primary, nonsupplementary alignments with MAPQ at least 20.
+
+| Sample | EPSPS mean | EPSPS median | Control mean | Control median | Mean-based CN | Median-based CN |
+|---|---:|---:|---:|---:|---:|---:|
+| Kansas-sensitive `SRR30167488` | 47.322× | 49× | 41.333× | 43.700× | 1.145× | 1.121× |
+| Tennessee-resistant `SRR30167495` | 3,649.25× | 3,835× | 48.188× | 50.982× | 75.730× | 75.223× |
+
+The sensitive sample is consistent with one native EPSPS copy per haploid genome equivalent. The resistant sample contains approximately **75.5 total EPSPS copies per haploid genome equivalent**, or roughly 74.5 amplified copies above the native locus. The close agreement of mean- and median-normalized estimates indicates that this conclusion is not driven by a small subset of EPSPS bases. This is total dosage; it does not yet allocate the amplified copies between eccDNA and tandem/integrated structures.

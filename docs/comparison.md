@@ -14,7 +14,7 @@ This experiment applies the same copy-number and structural workflow to a glypho
 | Role | Run | BioSample | Sample title | Platform | Reads | Yield | Approximate depth |
 |---|---|---|---|---|---:|---:|---:|
 | Sensitive control | [SRR30167488](https://www.ncbi.nlm.nih.gov/sra/?term=SRR30167488) | SAMN43072011 | Kansas-sensitive | PacBio Sequel IIe HiFi WGS | 1,517,513 | 19.58 Gb | ~51× |
-| Resistant test | [SRR30167495](https://www.ncbi.nlm.nih.gov/sra/?term=SRR30167495) | pending metadata capture | Tennessee-resistant | PacBio Sequel IIe HiFi WGS | 1,854,582 | ~22.70 Gb | ~59× |
+| Resistant test | [SRR30167495](https://www.ncbi.nlm.nih.gov/sra/?term=SRR30167495) | SAMN43072004 | Tennessee-resistant | PacBio Sequel IIe HiFi WGS | 1,854,582 | ~22.70 Gb | ~59× |
 
 Approximate depths use the 383,947,622-bp chromosome assembly as the denominator. These plants come from different geographic populations, so this is a phenotype-associated comparison rather than an isogenic or population-matched experiment.
 
@@ -71,8 +71,8 @@ Both samples will be processed using identical references, filters, software ver
 - [x] Sensitive phenotype verified as Kansas-sensitive
 - [x] Resistant phenotype identified as Tennessee-resistant
 - [x] Slurm array download prepared
-- [ ] FASTQs downloaded
-- [ ] FASTQ integrity and read statistics verified
+- [x] FASTQs downloaded
+- [x] FASTQ integrity and read statistics verified
 - [ ] Chromosome mappings completed
 - [ ] Mapping-based EPSPS CN estimated
 - [ ] Unique-k-mer CN estimated
@@ -84,5 +84,4 @@ Both samples will be processed using identical references, filters, software ver
 
 ## Current activity
 
-The two compressed HiFi FASTQs are being downloaded using an array job. Results will be added here after validation.
-
+Both compressed HiFi FASTQs passed `gzip -t`. `SRR30167488` contains 1,517,513 reads totaling 19,581,162,567 bp (mean 12,903.5 bp; N50 16,149 bp; Q20 96.36%; Q30 91.47%). `SRR30167495` contains 1,854,582 reads totaling 22,704,066,842 bp (mean 12,242.1 bp; N50 15,161 bp; Q20 96.47%; Q30 91.76%). GC content is nearly identical at 33.67% and 33.66%. The resistant sample has approximately 16% more sequence, so every locus comparison will use within-sample genome normalization rather than raw counts.

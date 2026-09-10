@@ -76,7 +76,7 @@ Both samples will be processed using identical references, filters, software ver
 - [x] Chromosome mappings completed
 - [x] Mapping-based EPSPS CN estimated
 - [x] Unique-k-mer CN estimated
-- [ ] Replicon comparisons completed
+- [x] Replicon comparisons completed
 - [ ] Assemblies completed
 - [ ] EPSPS graph components classified
 - [ ] Chromosome-anchor search completed
@@ -109,3 +109,18 @@ The same 3,153 EPSPS 31-mers that occur exactly once in the chromosome assembly 
 | Tennessee-resistant `SRR30167495` | 4,125.29× | 4,150× | 0 | ~56× | 73.666× | 74.107× |
 
 The sensitive mean is lowered by 35 absent markers and population-specific variation, making the median the more robust statistic. The resistant median-based k-mer estimate of **74.1 copies per haploid genome equivalent** agrees within approximately 1.5% of the mapping median estimate of 75.2. The convergent working estimate is therefore approximately **74–75 total EPSPS copies per haploid genome equivalent** in the Tennessee-resistant sample and approximately one copy in the Kansas-sensitive control.
+
+### Study-specific circular reference
+
+`PQ096843.1` was downloaded and validated as a 394,880-bp sequence with 34.01% GC. Five MAPQ-60 alignment blocks place it across essentially the entire `MT025716.1` reference. Its query origin corresponds to approximately `MT025716.1:322,538`, and a later block wraps from the canonical reference end into its beginning. Thus, `PQ096843.1` is principally a rotated, structurally polymorphic version of the original EPSPS replicon rather than a GS2-type rearranged molecule. Small query gaps and larger indel differences remain, so both references are retained for sample-specific mapping and assembly comparison.
+
+### Replicon mapping comparison
+
+| Sample | Reference | Breadth | Mean depth | Primary mapped reads |
+|---|---|---:|---:|---:|
+| Kansas-sensitive | `MT025716.1` | 48.68% | 455.81× | 272,679 |
+| Kansas-sensitive | `PQ096843.1` | 50.17% | 549.15× | 332,405 |
+| Tennessee-resistant | `MT025716.1` | 100% | 3,717.62× | 422,203 |
+| Tennessee-resistant | `PQ096843.1` | 100% | 3,823.00× | 480,838 |
+
+The sensitive sample's high apparent mean depth is not eccDNA evidence: when a repetitive, chromosome-derived replicon is used as the only reference, many ordinary genomic reads are recruited into the homologous half of the target. Its approximately 50% breadth shows that large parts of either replicon are absent. In contrast, the resistant sample covers every base of both original-like references at very high depth. Consequently, breadth and structure-specific intervals are informative here, whereas target-only mean depth and total mapped-read counts are not valid copy-number estimators.
